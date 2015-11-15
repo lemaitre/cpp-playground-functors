@@ -33,11 +33,15 @@ int main() {
 
   auto square = [](const auto& x) { return x * x; };
   auto sqrt = [](const auto& x) { return std::sqrt(x); };
+
   auto fsquare = func::apply(square);
   auto fsqrt = func::apply(sqrt);
 
-  auto sump2 = func::add(fsquare(px), fsquare(py), fsquare(pz));
-  auto p = fsqrt(sump2);
+  //auto sump2 = func::add(fsquare(px), fsquare(py), fsquare(pz));
+  //auto p = fsqrt(sump2);
+
+  auto p = fsqrt(func::reduce(
+      [](const auto& x, const auto& y) { return x + y; }, fsquare(px), py, pz));
 
   // What I would like to have:
   // auto p = fsqrt(func::add(func::map(fsquare, px, py, pz)));
