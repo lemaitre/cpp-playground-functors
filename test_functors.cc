@@ -33,10 +33,14 @@ int main() {
 
   auto square = [](const auto& x) { return x * x; };
   auto sqrt = [](const auto& x) { return std::sqrt(x); };
-  auto fsquare = [square](auto f) { return func::chain(f, square); };
+  auto fsquare = func::apply(square);
+  auto fsqrt = func::apply(sqrt);
 
   auto sump2 = func::add(fsquare(px), fsquare(py), fsquare(pz));
-  auto p = func::chain(sump2, sqrt);
+  auto p = fsqrt(sump2);
+
+  // What I would like to have:
+  // auto p = fsqrt(func::add(func::map(fsquare, px, py, pz)));
 
   std::cout << p(particle) << '\n';
 

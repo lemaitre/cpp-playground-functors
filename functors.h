@@ -76,5 +76,23 @@ constexpr auto chain(F f, FS&&... fs) {
   auto ichain = chain(std::forward<FS>(fs)...);
   return Chainer<F, decltype(ichain)>{std::move(f), std::move(ichain)};
 }
+
+template <typename F>
+struct Applier {
+  F f_;
+
+  explicit Applier(F f) : f_{std::move(f)} {}
+
+  template <typename RHS>
+  auto operator()(RHS&& rhs) {
+    return chain(std::forward<RHS>(rhs), f_);
+  }
+};
+
+template <typename F>
+constexpr auto apply(F f) {
+  return Applier<F>{std::move(f)};
+}
+
 };
 #endif
