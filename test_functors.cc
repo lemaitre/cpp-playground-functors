@@ -4,9 +4,13 @@
 #include <iostream>
 #include <vector>
 
-struct Point { double x, y; };
+struct Point {
+  double x, y;
+};
 
-struct Track { std::vector<Point> points; };
+struct Track {
+  std::vector<Point> points;
+};
 
 struct Particle {
   double px, py, pz;
@@ -31,7 +35,7 @@ int main() {
   auto sqrt = [](const auto& x) { return std::sqrt(x); };
   auto fsquare = [square](auto f) { return func::chain(f, square); };
 
-  auto sump2 = func::add(func::add(fsquare(px), fsquare(py)), fsquare(pz));
+  auto sump2 = func::add(fsquare(px), fsquare(py), fsquare(pz));
   auto p = func::chain(sump2, sqrt);
 
   std::cout << p(particle) << '\n';

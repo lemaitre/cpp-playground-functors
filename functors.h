@@ -23,6 +23,12 @@ constexpr auto add(LHS lhs, RHS rhs) {
   return Adder<LHS, RHS>{std::move(lhs), std::move(rhs)};
 }
 
+template <typename F, typename... FS>
+constexpr auto add(F f, FS&&... fs) {
+  auto iadd = add(std::forward<FS>(fs)...);
+  return Adder<F, decltype(iadd)>{std::move(f), std::move(iadd)};
+}
+
 template <typename LHS, typename RHS>
 struct Multiplier {
   LHS lhs_;
@@ -39,6 +45,12 @@ struct Multiplier {
 template <typename LHS, typename RHS>
 constexpr auto mult(LHS lhs, RHS rhs) {
   return Multiplier<LHS, RHS>{std::move(lhs), std::move(rhs)};
+}
+
+template <typename F, typename... FS>
+constexpr auto mult(F f, FS&&... fs) {
+  auto imult = mult(std::forward<FS>(fs)...);
+  return Multiplier<F, decltype(imult)>{std::move(f), std::move(imult)};
 }
 
 template <typename LHS, typename RHS>
@@ -58,6 +70,11 @@ template <typename LHS, typename RHS>
 constexpr auto chain(LHS lhs, RHS rhs) {
   return Chainer<LHS, RHS>{std::move(lhs), std::move(rhs)};
 }
-};
 
+template <typename F, typename... FS>
+constexpr auto chain(F f, FS&&... fs) {
+  auto ichain = chain(std::forward<FS>(fs)...);
+  return Chainer<F, decltype(ichain)>{std::move(f), std::move(ichain)};
+}
+};
 #endif
