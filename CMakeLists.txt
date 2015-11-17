@@ -10,3 +10,4 @@ set(CMAKE_CXX_FLAGS "-O3 -Wall -Werror -pedantic")
 include_directories(.)
 
 add_executable(test_func tests/test_func.cc)
+add_executable(test_compiletime tests/test_compiletime.cc)
