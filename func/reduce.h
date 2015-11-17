@@ -8,37 +8,56 @@
 
 namespace func {
 
-template <typename OP, typename LHS, typename RHS>
-struct Reducer {
-  OP op_;
-  LHS lhs_;
-  RHS rhs_;
-
-  Reducer(OP op, LHS lhs, RHS rhs)
-      : op_{std::move(op)}, lhs_{std::move(lhs)}, rhs_{std::move(rhs)} {}
-
-  template <typename T>
-  auto operator()(T&& x) {
-    return op_(lhs_(std::forward<T>(x)), rhs_(std::forward<T>(x)));
-  }
-};
-
-template <typename OP, typename LHS, typename RHS>
-constexpr auto reduce(OP op, LHS lhs, RHS rhs) {
-  return Reducer<OP, LHS, RHS>{std::move(op), std::move(lhs), std::move(rhs)};
-}
-
-template <typename OP, typename... TS>
-constexpr auto reduce(OP op, std::tuple<TS...>&& tup) {
-  auto reduce_with_op = [=](auto... xs) { return reduce(op, xs...); };
-  return invoke(reduce_with_op, std::move(tup));
-}
-
-template <typename OP, typename F, typename... FS>
-constexpr auto reduce(OP op, F f, FS&&... fs) {
-  auto ired = reduce(op, std::forward<FS>(fs)...);
-  return reduce(op, f, ired);
-}
+  struct {
+  private:
+    // Helper to detect tuples
+    template <typename T>
+    struct is_tuple {
+      typedef void disable;
+    };
+    template <typename... ARGS>
+    struct is_tuple<std::tuple<ARGS...>> {
+      typedef void enable;
+    };
+    // Helper to recursively reduce
+    template <typename T, typename OP, typename dummy, typename... ARGS>
+    struct _impl;
+    template <typename T, typename OP, typename dummy>
+    struct _impl<T, OP, dummy> {
+      static constexpr auto call(T t, OP op) {
+        return std::forward<T>(t);
+      }
+    };
+    template <typename T, typename OP, typename HEAD>
+    struct _impl<T, OP, typename is_tuple<HEAD>::disable, HEAD> {
+      static constexpr auto call(T t, OP op, HEAD h) {
+        return std::forward<HEAD>(h);
+      }
+    };
+    template <typename T, typename OP, typename HEAD, typename... TAIL>
+    struct _impl<T, OP, typename is_tuple<HEAD>::disable, HEAD, TAIL...> {
+      static constexpr auto call(T t, OP op, HEAD h, TAIL&&... tail) {
+        return op(std::forward<HEAD>(h), _impl<T, OP, void, TAIL...>::call(std::forward<T>(t), std::forward<OP>(op), std::forward<TAIL>(tail)...));
+      }
+    };
+    template <typename T, typename OP, typename dummy, typename... ARGS>
+    struct _impl<T, OP, dummy, std::tuple<ARGS...>> {
+      static constexpr auto call(T t, OP op, std::tuple<ARGS...>&& tup) {
+        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
+      }
+    };
+    // Helper to call _impl<...>::call() inside the lambda
+    template <typename T, typename OP, typename... ARGS>
+    static constexpr auto _call(T t, OP op, ARGS&&... args) {
+      return _impl<T, OP, void, ARGS...>::call(std::forward<T>(t), std::forward<OP>(op), std::forward<ARGS>(args)...);
+    }
+  public:
+    // actual interface
+    template <typename T, typename OP, typename... ARGS>
+    constexpr auto operator()(T t, OP op, ARGS&&... args) const {
+      return _call(std::forward<T>(t), std::forward<OP>(op), std::forward<ARGS>(args)...);
+    }
+  } reduce;
 };
 
 #endif  // REDUCE_H
