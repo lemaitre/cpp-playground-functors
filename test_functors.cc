@@ -1,4 +1,4 @@
-#include "functors.h"
+#include "func/func.h"
 
 #include <cmath>
 #include <iostream>
@@ -37,13 +37,7 @@ int main() {
   auto fsquare = func::lift(square);
   auto fsqrt = func::lift(sqrt);
 
-  //auto sump2 = func::add(fsquare(px), fsquare(py), fsquare(pz));
-  //auto p = fsqrt(sump2);
-
-  auto p = fsqrt(func::add(fsquare(px), fsquare(py), fsquare(pz)));
-
-  // What I would like to have:
-  // auto p = fsqrt(func::add(func::map(fsquare, px, py, pz)));
+  auto p = fsqrt(func::add(func::map(fsquare, px, py, pz)));
 
   std::cout << p(particle) << '\n';
 
