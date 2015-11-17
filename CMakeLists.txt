@@ -7,4 +7,6 @@ set(CMAKE_CXX_FLAGS "-O3 -Wall -Werror -pedantic")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
 #set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
 
-add_executable(test_functors test_functors.cc)
+include_directories(.)
+
+add_executable(test_func tests/test_func.cc)
