@@ -8,7 +8,7 @@
 
 namespace func {
 
-  struct {
+  struct reduce {
   private:
     // Helper to detect tuples
     template <typename T>

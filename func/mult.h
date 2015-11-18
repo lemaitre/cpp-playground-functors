@@ -7,20 +7,14 @@
 
 namespace func {
 
-  struct {
+  struct mult {
     template <typename... ARGS>
-    constexpr auto operator()(ARGS&&... args) {
+    constexpr auto operator()(ARGS&&... args) const {
       return reduce(1, [](auto&& lhs, auto&& rhs) { return lhs * rhs; },
           std::forward<ARGS>(args)...
       );
     }
   } mult;
-  //auto fmult = func::lift(mult);
-//template <typename... FS>
-//constexpr auto mult(FS&&... fs) {
-//  return reduce([](const auto& x, const auto& y) { return x * y; },
-//                std::forward<FS>(fs)...);
-//}
 }
 
 #endif  // MULT_H

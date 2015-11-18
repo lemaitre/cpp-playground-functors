@@ -2,7 +2,7 @@
 #define WRAP_H
 
 namespace func {
-  struct {
+  struct wrap {
   private:
     template <typename F, typename = void>
     struct _impl;

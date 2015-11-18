@@ -10,7 +10,7 @@
 
 namespace func {
 
-  struct {
+  struct chain {
   private:
     template <typename F>
     static constexpr auto _call(F f) {

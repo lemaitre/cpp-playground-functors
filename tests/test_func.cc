@@ -4,11 +4,13 @@
 #include "mock_particle.h"
 #include "func/func.h"
 
+float sqrt2(float a) { return std::sqrt(a); }
 auto test(const Particle& particle) {
   auto square = [](const auto& x) { return x * x; };
   auto sqrt = [](const auto& x) { return std::sqrt(x); };
 
-  auto p = func::map(square, px, py, pz) >> func::add >> sqrt;
+  //auto p = func::map(square, px, py, pz) >> func::add >> sqrt;
+  auto p = sqrt2 << func::add << func::map(square, px, py, pz);
 
   return p(particle);
 }
