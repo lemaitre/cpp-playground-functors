@@ -16,7 +16,28 @@ namespace func {
       typedef void disable;
     };
     template <typename... ARGS>
+    struct is_tuple<std::tuple<ARGS...>&&> {
+      typedef std::tuple<ARGS...>&& type;
+      typedef void enable;
+    };
+    template <typename... ARGS>
+    struct is_tuple<std::tuple<ARGS...>&> {
+      typedef std::tuple<ARGS...>& type;
+      typedef void enable;
+    };
+    template <typename... ARGS>
     struct is_tuple<std::tuple<ARGS...>> {
+      typedef std::tuple<ARGS...> type;
+      typedef void enable;
+    };
+    template <typename... ARGS>
+    struct is_tuple<const std::tuple<ARGS...>&> {
+      typedef const std::tuple<ARGS...>& type;
+      typedef void enable;
+    };
+    template <typename... ARGS>
+    struct is_tuple<const std::tuple<ARGS...>> {
+      typedef const std::tuple<ARGS...> type;
       typedef void enable;
     };
     // Helper to recursively reduce
@@ -41,8 +62,32 @@ namespace func {
       }
     };
     template <typename T, typename OP, typename dummy, typename... ARGS>
-    struct _impl<T, OP, dummy, std::tuple<ARGS...>> {
+    struct _impl<T, OP, dummy, std::tuple<ARGS...>&&> {
       static constexpr auto call(T t, OP op, std::tuple<ARGS...>&& tup) {
+        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, std::move(tup));
+      }
+    };
+    template <typename T, typename OP, typename dummy, typename... ARGS>
+    struct _impl<T, OP, dummy, std::tuple<ARGS...>&> {
+      static constexpr auto call(T t, OP op, std::tuple<ARGS...>& tup) {
+        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
+      }
+    };
+    template <typename T, typename OP, typename dummy, typename... ARGS>
+    struct _impl<T, OP, dummy, std::tuple<ARGS...>> {
+      static constexpr auto call(T t, OP op, std::tuple<ARGS...> tup) {
+        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
+      }
+    };
+    template <typename T, typename OP, typename dummy, typename... ARGS>
+    struct _impl<T, OP, dummy, const std::tuple<ARGS...>&> {
+      static constexpr auto call(T t, OP op, const std::tuple<ARGS...>& tup) {
+        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
+      }
+    };
+    template <typename T, typename OP, typename dummy, typename... ARGS>
+    struct _impl<T, OP, dummy, const std::tuple<ARGS...>> {
+      static constexpr auto call(T t, OP op, const std::tuple<ARGS...> tup) {
         return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
       }
     };
