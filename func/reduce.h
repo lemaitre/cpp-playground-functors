@@ -58,6 +58,6 @@ namespace func {
       return _call(std::forward<T>(t), std::forward<OP>(op), std::forward<ARGS>(args)...);
     }
   } reduce;
-};
+}
 
 #endif  // REDUCE_H

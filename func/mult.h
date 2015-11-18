@@ -21,6 +21,6 @@ namespace func {
 //  return reduce([](const auto& x, const auto& y) { return x * y; },
 //                std::forward<FS>(fs)...);
 //}
-};
+}
 
 #endif  // MULT_H

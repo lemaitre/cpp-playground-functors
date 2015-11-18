@@ -42,6 +42,6 @@ namespace func {
       return _call(std::forward<HEAD>(h), std::forward<TAIL>(tail)...);
     }
   } chain;
-};
+}
 
 #endif  // CHAIN_H

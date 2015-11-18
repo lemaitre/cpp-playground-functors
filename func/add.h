@@ -21,6 +21,6 @@ namespace func {
 //   return reduce(0, [](const auto& x, const auto& y) { return x + y; },
 //                 std::forward<FS>(fs)...);
 // }
-};
+}
 
 #endif  // ADD_H

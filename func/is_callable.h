@@ -42,6 +42,6 @@ namespace func {
   public:
     static const bool value = _impl<TYPE>::value;
   };
-};
+}
 
 #endif
