@@ -9,8 +9,8 @@ namespace func {
   struct {
     template <typename F, typename... FS>
     constexpr auto operator()(F f, FS... fs) {
-      return [=](auto... args) {
-        return std::make_tuple(f(fs(args...))...);
+      return [=](auto&&... args) {
+        return std::make_tuple(f(fs(std::forward<decltype((args))>(args)...))...);
       };
     }
   } map;

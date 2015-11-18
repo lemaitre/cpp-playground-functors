@@ -64,31 +64,31 @@ namespace func {
     template <typename T, typename OP, typename dummy, typename... ARGS>
     struct _impl<T, OP, dummy, std::tuple<ARGS...>&&> {
       static constexpr auto call(T t, OP op, std::tuple<ARGS...>&& tup) {
-        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, std::move(tup));
+        return invoke([&t, &op](auto&&... args) {return _call(t, op, std::forward<decltype((args))>(args)...);}, std::move(tup));
       }
     };
     template <typename T, typename OP, typename dummy, typename... ARGS>
     struct _impl<T, OP, dummy, std::tuple<ARGS...>&> {
       static constexpr auto call(T t, OP op, std::tuple<ARGS...>& tup) {
-        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
+        return invoke([&t, &op](auto&&... args) {return _call(t, op, std::forward<decltype((args))>(args)...);}, tup);
       }
     };
     template <typename T, typename OP, typename dummy, typename... ARGS>
     struct _impl<T, OP, dummy, std::tuple<ARGS...>> {
       static constexpr auto call(T t, OP op, std::tuple<ARGS...> tup) {
-        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
+        return invoke([&t, &op](auto&&... args) {return _call(t, op, std::forward<decltype((args))>(args)...);}, tup);
       }
     };
     template <typename T, typename OP, typename dummy, typename... ARGS>
     struct _impl<T, OP, dummy, const std::tuple<ARGS...>&> {
       static constexpr auto call(T t, OP op, const std::tuple<ARGS...>& tup) {
-        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
+        return invoke([&t, &op](auto&&... args) {return _call(t, op, std::forward<decltype((args))>(args)...);}, tup);
       }
     };
     template <typename T, typename OP, typename dummy, typename... ARGS>
     struct _impl<T, OP, dummy, const std::tuple<ARGS...>> {
       static constexpr auto call(T t, OP op, const std::tuple<ARGS...> tup) {
-        return invoke([&t, &op](auto... args){return _call(t, op, args...);}, tup);
+        return invoke([&t, &op](auto&&... args) {return _call(t, op, std::forward<decltype((args))>(args)...);}, tup);
       }
     };
     // Helper to call _impl<...>::call() inside the lambda

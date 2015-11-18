@@ -10,7 +10,7 @@ namespace func {
   struct {
     template <typename... ARGS>
     constexpr auto operator()(ARGS&&... args) {
-      return reduce(0, [](auto lhs, auto rhs) { return lhs + rhs; },
+      return reduce(0, [](auto&& lhs, auto&& rhs) { return lhs + rhs; },
           std::forward<ARGS>(args)...
       );
     }

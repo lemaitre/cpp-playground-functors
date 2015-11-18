@@ -18,7 +18,7 @@ namespace func {
     }
     template <typename HEAD, typename... TAIL>
     static constexpr auto _call(HEAD h, TAIL... tail) {
-      return [=](auto... args) { return _call(tail...)(h(args...)); };
+      return [=](auto&&... args) { return _call(tail...)(h(std::forward<decltype((args))>(args)...)); };
     }
   public:
     template <typename HEAD, typename... TAIL>
