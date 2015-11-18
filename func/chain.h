@@ -33,8 +33,8 @@ template <typename LHS, typename RHS,
   typename = typename std::enable_if<func::is_callable<LHS>::value && func::is_callable<RHS>::value>::type
 >
 constexpr auto operator>>(LHS lhs, RHS rhs) {
-  //return [lhs,rhs](auto... args) { return rhs(lhs(args...)); };
-  return func::chain(std::forward<LHS>(lhs), std::forward<RHS>(rhs));
+  return [lhs,rhs](auto&&... args) { return rhs(lhs(std::forward<decltype((args))>(args)...)); };
+  //return func::chain(std::forward<LHS>(lhs), std::forward<RHS>(rhs));
 }
 
 // Backward chaining: (f << g)(x) <=> f(g(x))
@@ -42,8 +42,8 @@ template <typename LHS, typename RHS,
   typename = typename std::enable_if<func::is_callable<LHS>::value && func::is_callable<RHS>::value>::type
 >
 constexpr auto operator<<(LHS lhs, RHS rhs) {
-  //return [lhs,rhs](auto... args) { return lhs(rhs(args...)); };
-  return func::chain(std::forward<RHS>(rhs), std::forward<LHS>(lhs));
+  return [lhs,rhs](auto&&... args) { return lhs(rhs(std::forward<decltype((args))>(args)...)); };
+  //return func::chain(std::forward<RHS>(rhs), std::forward<LHS>(lhs));
 }
 
 #endif  // CHAIN_H

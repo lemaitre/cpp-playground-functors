@@ -10,7 +10,7 @@ auto test(const Particle& particle) {
   auto sqrt = [](const auto& x) { return std::sqrt(x); };
 
   //auto p = func::map(square, px, py, pz) >> func::add >> sqrt;
-  auto p = sqrt2 << func::add << func::map(square, px, py, pz);
+  auto p = sqrt << func::add << func::map(square, px, py, pz);
 
   return p(particle);
 }

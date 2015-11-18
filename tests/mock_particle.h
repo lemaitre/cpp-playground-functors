@@ -22,15 +22,15 @@ struct Particle {
   auto track() const { return t; }
 };
 
-auto px = func::wrap(&Particle::px);
-auto py = func::wrap(&Particle::py);
-auto pz = func::wrap(&Particle::pz);
-auto track = func::wrap(&Particle::track);
+//auto px = func::wrap(&Particle::px);
+//auto py = func::wrap(&Particle::py);
+//auto pz = func::wrap(&Particle::pz);
+//auto track = func::wrap(&Particle::track);
 
-//auto px(const Particle& p) { return p.px; }
-//auto py(const Particle& p) { return p.py; }
-//auto pz(const Particle& p) { return p.pz; }
-//auto track(const Particle& p) { return p.t; }
+auto px(const Particle& p) { return p._px; }
+auto py(const Particle& p) { return p._py; }
+auto pz(const Particle& p) { return p._pz; }
+auto track(const Particle& p) { return p.t; }
 auto slope(const Track& t) {
   // Just a mock
   const auto first = t.points[0];
