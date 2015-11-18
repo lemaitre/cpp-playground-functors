@@ -5,7 +5,6 @@
 #include "is_callable.h"
 #include "wrap.h"
 #include "chain.h"
-#include "lift.h"
 #include "reduce.h"
 #include "add.h"
 #include "mult.h"
