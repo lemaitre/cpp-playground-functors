@@ -10,7 +10,7 @@ auto test(const Particle& particle) {
   auto sqrt = [](const auto& x) { return std::sqrt(x); };
 
   //auto p = func::map(square, px, py, pz) >> func::add >> sqrt;
-  auto p = sqrt << func::add << func::map(square, px, py, pz);
+  auto p = func::identity << sqrt << func::add << func::map(square, px, py, pz);
 
   return p(particle);
 }
@@ -20,6 +20,6 @@ int main() {
 
   std::cout << test(particle) << '\n';
 
-  auto pslope = track >> slope;
+  auto pslope = func::identity >> track >> slope;
   std::cout << pslope(particle) << '\n';
 }

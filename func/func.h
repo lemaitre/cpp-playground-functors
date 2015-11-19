@@ -9,5 +9,7 @@
 #include "add.h"
 #include "mult.h"
 #include "map.h"
+#include "identity.h"
+#include "pack.h"
 
 #endif
